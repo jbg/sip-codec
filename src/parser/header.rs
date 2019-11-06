@@ -1,5 +1,5 @@
 use http::header::{HeaderName, HeaderValue};
-use nom::is_space;
+use nom::character::is_space;
 
 use super::is_newline;
 

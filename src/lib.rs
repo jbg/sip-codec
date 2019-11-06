@@ -1,5 +1,6 @@
 #![forbid(unsafe_code)]
 #![allow(clippy::write_with_newline)]
+
 #[macro_use]
 extern crate nom;
 

@@ -3,7 +3,11 @@ use std::string::FromUtf8Error;
 
 use failure::Error;
 use http::header::{HeaderMap, HeaderName, HeaderValue};
-use nom::{is_digit, is_space, rest, IResult};
+use nom::{
+	character::{is_digit, is_space},
+	combinator::rest,
+	IResult,
+};
 
 use crate::headers::content_length::ContentLength;
 use crate::headers::HeaderMapParse;
@@ -30,7 +34,8 @@ enum BodyLength {
 }
 
 fn get_body_length(map: &HeaderMap) -> BodyLength {
-	map.typed_get::<ContentLength>()
+	map
+		.typed_get::<ContentLength>()
 		.map(Into::into)
 		.map(BodyLength::Length)
 		.unwrap_or(BodyLength::All)
@@ -136,9 +141,7 @@ mod tests {
 		));
 		assert_eq!(
 			expected,
-			parse_request(
-				b"GET sip:user@server:port SIP/2.0\r\na:b\r\nContent-length: 7\r\n\r\nabcdefg"
-			)
+			parse_request(b"GET sip:user@server:port SIP/2.0\r\na:b\r\nContent-length: 7\r\n\r\nabcdefg")
 		);
 	}
 
